@@ -18,21 +18,7 @@ end
 -- Wait for action with timeout
 -- =========================
 local function waitForAction(actionName)
-    local timer = os.startTimer(ACTION_TIMEOUT)
-
-    while true do
-        if d.getAction() == nil then
-            debug("✓ Completed: " .. actionName)
-            return true
-        end
-
-        local event, id = os.pullEvent()
-
-        if event == "timer" and id == timer then
-            debug("✗ TIMEOUT: " .. actionName)
-            return false
-        end
-    end
+ return true -- changing some behvaior
 end
 
 -- =========================
