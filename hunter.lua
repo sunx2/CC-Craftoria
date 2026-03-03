@@ -25,7 +25,7 @@ local function waitForAction(actionName)
     local timeout = os.clock() + ACTION_TIMEOUT
 
     while os.clock() < timeout do
-        if d.getCurrentAction() == "" then
+        if d.getAction() == nil then
             debug(actionName .. " complete")
             return true
         end
