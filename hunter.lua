@@ -1,3 +1,4 @@
+print("hunter drone program started")
 d = peripheral.wrap("right")
 
 local dx, dy, dz = -66.5, 152.5, -3473.5
