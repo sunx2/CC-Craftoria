@@ -66,7 +66,7 @@ while true do
     -- ENTITY IMPORT
     runAction("entity_import", function()
         d.addArea(dx, dy, dz-10, dx, dy, dz+10, "sphere")
-        d.addBlackListText(d.getOwnerName())
+        d.addBlacklistText(d.getOwnerName())
     end)
 
     -- GOTO EXPORT
