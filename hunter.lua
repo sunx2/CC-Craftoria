@@ -69,7 +69,7 @@ while true do
     -- ENTITY IMPORT (large 3D area)
     -- =========================
     runAction("entity_import", function()
-        d.addArea(dx-10, dy-5, dz-10, dx+10, dy+5, dz+10)
+        d.addArea(dx-10, dy-5, dz-10, dx+10, dy+5, dz+10,"sphere")
         d.addBlacklistText("@player")
         d.addWhitelistText("@mob")
     end)
