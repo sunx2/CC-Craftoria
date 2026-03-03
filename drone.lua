@@ -65,11 +65,6 @@ end
 while true do
     sleep(3)
 
-    -- Debug fuel + position
-    local x,y,z = d.getPosition()
-    debug("Position: " .. x .. "," .. y .. "," .. z)
-    debug("Fuel: " .. d.getFuelLevel())
-
     -- =========================
     -- ENTITY IMPORT (large 3D area)
     -- =========================
