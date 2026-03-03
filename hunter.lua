@@ -1,11 +1,15 @@
-print("hunter drone program started")
-d = peripheral.wrap("right")
+print("Hunter drone program started")
 
+local d = peripheral.wrap("right")
+
+-- HOME POSITION
 local dx, dy, dz = -66.5, 152.5, -3473.5
+local dropX, dropY, dropZ = -76, 143, -3488
 
-local ACTION_TIMEOUT = 20      -- seconds per action
-local MAX_RETRIES    = 3       -- retries before skipping step
-local RETRY_DELAY    = 2       -- wait before retrying
+-- SETTINGS
+local ACTION_TIMEOUT = 40      -- increased timeout
+local MAX_RETRIES    = 3
+local RETRY_DELAY    = 2
 
 -- =========================
 -- Debug printer
@@ -15,10 +19,21 @@ local function debug(msg)
 end
 
 -- =========================
--- Wait for action with timeout
+-- Wait for action to finish
 -- =========================
 local function waitForAction(actionName)
- return true -- changing some behvaior
+    local timeout = os.clock() + ACTION_TIMEOUT
+
+    while os.clock() < timeout do
+        if d.getCurrentAction() == "" then
+            debug(actionName .. " complete")
+            return true
+        end
+        sleep(0.2)
+    end
+
+    debug("Timeout waiting for: " .. actionName)
+    return false
 end
 
 -- =========================
@@ -31,7 +46,7 @@ local function runAction(actionName, setupFunction)
         d.clearArea()
         setupFunction()
         d.setAction(actionName)
-        
+
         if waitForAction(actionName) then
             return true
         end
@@ -50,24 +65,43 @@ end
 while true do
     sleep(3)
 
-    -- ENTITY IMPORT
+    -- Debug fuel + position
+    local x,y,z = d.getPosition()
+    debug("Position: " .. x .. "," .. y .. "," .. z)
+    debug("Fuel: " .. d.getFuelLevel())
+
+    -- =========================
+    -- ENTITY IMPORT (large 3D area)
+    -- =========================
     runAction("entity_import", function()
-        d.addArea(dx, dy, dz-10, dx, dy, dz+10, "sphere")
+        d.addArea(dx-10, dy-5, dz-10, dx+10, dy+5, dz+10)
         d.addBlacklistText("@player")
         d.addWhitelistText("@mob")
     end)
 
-    -- GOTO EXPORT
+    sleep(1)
+
+    -- =========================
+    -- MOVE TO DROP LOCATION
+    -- =========================
     runAction("goto", function()
-        d.addArea(-76, 143, -3488)
+        d.addArea(dropX, dropY, dropZ)
     end)
 
+    sleep(1)
+
+    -- =========================
     -- ENTITY EXPORT
+    -- =========================
     runAction("entity_export", function()
-        -- no area needed if already at target
+        d.addArea(dropX, dropY, dropZ)
     end)
 
+    sleep(1)
+
+    -- =========================
     -- RETURN HOME
+    -- =========================
     runAction("goto", function()
         d.addArea(dx, dy, dz)
     end)
