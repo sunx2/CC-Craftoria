@@ -45,7 +45,7 @@ local function runAction(actionName, setupFunction)
         d.clearArea()
         setupFunction()
         d.setAction(actionName)
-
+        d.clearArea()
         if waitForAction(actionName) then
             return true
         end
@@ -67,7 +67,7 @@ while true do
     -- ENTITY IMPORT
     runAction("entity_import", function()
         d.addArea(dx, dy, dz-10, dx, dy, dz+10, "sphere")
-        d.addBlacklistText(d.getOwnerName())
+        d.addBlacklistText("@player")
     end)
 
     -- GOTO EXPORT
